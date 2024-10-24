@@ -1,6 +1,7 @@
 site_name = Joss Appleton-Fox
 src_dir = src
 build_dir = build
+gh-pages_url = git@github.com:jaf7C7/jaf7c7.github.io.git
 resource_dir = resources
 template_file = template.html
 resource_files = $(wildcard $(resource_dir)/*)
@@ -19,7 +20,7 @@ pandoc = pandoc \
 				 --title-prefix='$(site_name)' \
 				 --metadata title='$(get_title)'
 
-default: $(build_dir)/index.html
+all: $(build_dir)/index.html
 
 $(build_dir)/%.html: $(src_dir)/%.md $(global_dependencies)
 	test -d $(dir $@) || mkdir $(dir $@)
@@ -28,3 +29,15 @@ $(build_dir)/%.html: $(src_dir)/%.md $(global_dependencies)
 
 serve:
 	browser-sync start --server $(build_dir) --files $(build_dir)
+
+publish: all
+	trap 'test $$? -eq 0 || echo "Publishing failed."' EXIT && \
+	cd $(build_dir) && \
+	git init && \
+	git add . && \
+	git commit -m 'New build: $(shell date)' && \
+	git remote add gh-pages $(gh-pages_url) && \
+	git push -fu gh-pages master
+
+clean:
+	rm -rf $(build_dir)
