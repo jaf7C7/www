@@ -30,14 +30,10 @@ $(build_dir)/%.html: $(src_dir)/%.md $(global_dependencies)
 serve:
 	browser-sync start --server $(build_dir) --files $(build_dir)
 
+# TODO: Finish this:
+# https://docs.github.com/en/actions/writing-workflows
 publish: all
-	trap 'test $$? -eq 0 || echo "Publishing failed."' EXIT && \
-	cd $(build_dir) && \
-	git init && \
-	git add . && \
-	git commit -m 'New build: $(shell date)' && \
-	git remote add gh-pages $(gh-pages_url) && \
-	git push -fu gh-pages master
+	echo 'TODO: How to push just the build files to the gh-pages repo?'
 
 clean:
 	rm -rf $(build_dir)
