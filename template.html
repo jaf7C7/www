@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>${ title-prefix } - ${ title }</title>
+	<style>
+		${ styles.html() }
+
+		/* Style Overrides */
+    a {
+      color: blue;
+    }
+
+    a:hover {
+      text-decoration-style: wavy
+    }
+
+    a:active {
+      color: orangered;
+    }
+
+    a[href^="http"] {   /* Rough approx. of external links */
+      position: relative;
+      margin-right: 0.5em;
+    }
+
+    a[href^="http"]::after {
+      content: "";
+      position: absolute;
+      width: 0.8em;
+      height: 0.8em;
+      top: 0;
+      right: -0.8em;
+      background-image: url("external_link.svg");
+      background-size: cover;
+    }
+
+    header,
+    nav {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    header nav ul {
+      list-style: none;
+      display: flex;
+      padding-left: 5em;
+    }
+
+    header nav li + li {
+      margin-left: 1em;
+    }
+
+    footer {
+      margin-top: 8em;
+    }
+	</style>
+</head>
+<body>
+	<header>
+    <nav>
+      <h1>${ title-prefix }</h1>
+      <ul>
+        <li><a href="/notes/">Notes</a></li>
+        <li><a href="/projects/">Projects</a></li>
+    </nav>
+	</header>
+	<main>
+		${ body }
+	</main>
+	<footer>
+    <p>
+      <small>View this site's source on <a href="https://github.com/jaf7C7/jaf7c7.github.io" target="_blank">GitHub</a>.</small>
+    </p>
+	</footer>
+</body>
+</html>
