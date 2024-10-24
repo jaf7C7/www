@@ -24,7 +24,7 @@ all: $(build_dir)/index.html
 
 $(build_dir)/%.html: $(src_dir)/%.md $(global_dependencies)
 	test -d $(dir $@) || mkdir $(dir $@)
-	cp $(resource_files) $(build_dir)/
+	cp -r $(resource_files) $(build_dir)/
 	$(pandoc) --output $@ $<
 
 serve:
