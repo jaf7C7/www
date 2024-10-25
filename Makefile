@@ -2,6 +2,7 @@ site_name = Joss Appleton-Fox
 src_dir = src
 build_dir = build
 gh-pages_url = git@github.com:jaf7C7/jaf7c7.github.io.git
+gh-pages_initial_commit = 1b955d6715184062cdc51d07632ed3d3ea30bc50
 resource_dir = resources
 template_file = template.html
 resource_files = $(wildcard $(resource_dir)/*)
@@ -20,20 +21,23 @@ pandoc = pandoc \
 				 --title-prefix='$(site_name)' \
 				 --metadata title='$(get_title)'
 
-all: $(build_dir)/index.html
+all: $(build_dir) $(build_dir)/index.html
+
+$(build_dir):
+	test -d $@ || git clone $(gh-pages_url) $@
+	git -C $@ reset --hard $(gh-pages_initial_commit)
 
 $(build_dir)/%.html: $(src_dir)/%.md $(global_dependencies)
-	test -d $(dir $@) || mkdir $(dir $@)
 	cp -r $(resource_files) $(build_dir)/
 	$(pandoc) --output $@ $<
 
 serve:
 	browser-sync start --server $(build_dir) --files $(build_dir)
 
-# TODO: Finish this:
-# https://docs.github.com/en/actions/writing-workflows
 publish: all
-	echo 'TODO: How to push just the build files to the gh-pages repo?'
+	git -C $(build_dir) add .
+	git -C $(build_dir) commit -m 'New build: $(shell date)'
+	git -C $(build_dir) push -f
 
 clean:
 	rm -rf $(build_dir)
