@@ -37,6 +37,7 @@ $(build)/%.html: %.md
 
 $(notes):
 	@test -d $@ || git clone $(notes_url) $@
+	# Turn each document's heading into a pandoc title block:
 	@for file in $@/*.md ; do \
 		sed -i '1s/#/%/' "$$file" ; \
 	done
