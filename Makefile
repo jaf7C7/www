@@ -27,40 +27,48 @@ all: $(build) $(notes)
 	@tree
 
 $(build):
-	git clone $(gh-pages_url) $@
-	git -C $(build) reset --hard $(gh-pages_initial_commit)
+	@git clone $(gh-pages_url) $@
+	@git -C $(build) reset --hard $(gh-pages_initial_commit)
+	@echo 'Created $@'
 
 $(build)/%.html: %.md
+	@echo '$@'
 	$(pandoc) --output=$@ $<
 
 $(notes):
-	test -d $@ || git clone $(notes_url) $@
+	@test -d $@ || git clone $(notes_url) $@
+	@for file in $@/*.md ; do \
+		sed -i '1s/#/%/' "$$file" ; \
+	done
+	@echo 'Created $@'
 
 $(build)/$(notes)/index.html:
-	exec >$(notes)/toc.yaml ; \
+	@exec >$(notes)/toc.yaml ; \
 	echo 'title: "$(notes)"' ; \
 	echo 'toc:' ; \
 	for file in $(filter-out %/README.md,$(wildcard $(notes)/*.md)) ; do \
 		echo "- title: $$(sed -n '1s/. *//p' "$$file")" ; \
 		echo "  url: /$${file%.md}.html" ; \
 	done
-	test -d $(dir $@) || mkdir $(dir $@)
-	$(pandoc) \
+	@test -d $(dir $@) || mkdir $(dir $@)
+	@$(pandoc) \
 		--metadata-file=$(notes)/toc.yaml \
 		--output=$@ \
 		$(notes)/README.md
-	rm $(notes)/toc.yaml
+	@rm $(notes)/toc.yaml
+	@echo 'Created $@'
 
 serve:
-	gnome-terminal --tab -- \
+	@gnome-terminal --tab -- \
 		browser-sync start --server $(build) --files $(build)
 
 publish:
-	git -C $(build) add .
-	git -C $(build) commit -m "New build: $$(date)"
-	git -C $(build) push -f
+	@git -C $(build) add .
+	@git -C $(build) commit -m "New build: $$(date)"
+	@git -C $(build) push -f
 
 clean:
-	git -C $(build) reset --hard $(gh-pages_initial_commit)
-	git -C $(build) clean -dfx
-	rm -rf notes
+	@git -C $(build) reset --hard $(gh-pages_initial_commit)
+	@git -C $(build) clean -dfx
+	@rm -rf notes
+	@echo 'Cleaning finished.'
