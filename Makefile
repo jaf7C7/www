@@ -20,7 +20,7 @@ pandoc := pandoc \
 	--metadata=document-css:true
 
 all: $(build) $(notes)
-	${MAKE} \
+	@${MAKE} \
 		$(build)/index.html \
 		$(build)/$(notes)/index.html \
 		$(patsubst %.md,$(build)/%.html,$(filter-out %/README.md,$(wildcard $(notes)/*.md)))
@@ -33,11 +33,11 @@ $(build):
 
 $(build)/%.html: %.md
 	@echo '$@'
-	$(pandoc) --output=$@ $<
+	@$(pandoc) --output=$@ $<
 
 $(notes):
 	@test -d $@ || git clone $(notes_url) $@
-	# Turn each document's heading into a pandoc title block:
+	@# Turn each document's heading into a pandoc title block:
 	@for file in $@/*.md ; do \
 		sed -i '1s/#/%/' "$$file" ; \
 	done
