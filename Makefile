@@ -5,11 +5,11 @@ notes := notes
 notes_url := git@github.com:jaf7C7/HowTo.git
 template := template.html
 style := style.css
-# XXX Is this necessary?
-# dependencies := $(template) $(style) $(build) $(addprefix $(build)/,$(wildcard $(assets)/*))
+dependencies := $(template) $(style) Makefile
 gh-pages_url := git@github.com:jaf7C7/jaf7c7.github.io.git
 gh-pages_initial_commit := 1b955d6715184062cdc51d07632ed3d3ea30bc50
 pandoc := pandoc \
+	--quiet \
 	--standalone \
 	--template='$(template)' \
 	--embed-resources \
@@ -17,33 +17,29 @@ pandoc := pandoc \
 	--css='$(style)' \
 	--metadata=title-prefix:'$(site_name)' \
 	--metadata=maxwidth:42em \
-	--metadata=document-css:true
+	--metadata=document-css:true \
+	--shift-heading-level-by=1
 
 all: $(build) $(notes)
 	@${MAKE} \
 		$(build)/index.html \
 		$(build)/$(notes)/index.html \
 		$(patsubst %.md,$(build)/%.html,$(filter-out %/README.md,$(wildcard $(notes)/*.md)))
-	@tree
 
 $(build):
 	@git clone $(gh-pages_url) $@
 	@git -C $(build) reset --hard $(gh-pages_initial_commit)
 	@echo 'Created $@'
 
-$(build)/%.html: %.md
+$(build)/%.html: %.md $(dependencies)
 	@echo '$@'
 	@$(pandoc) --output=$@ $<
 
 $(notes):
 	@test -d $@ || git clone $(notes_url) $@
-	@# Turn each document's heading into a pandoc title block:
-	@for file in $@/*.md ; do \
-		sed -i '1s/#/%/' "$$file" ; \
-	done
 	@echo 'Created $@'
 
-$(build)/$(notes)/index.html:
+$(build)/$(notes)/index.html: $(dependencies)
 	@exec >$(notes)/toc.yaml ; \
 	echo 'title: "$(notes)"' ; \
 	echo 'toc:' ; \
