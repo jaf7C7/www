@@ -5,7 +5,8 @@ notes := notes
 notes_url := git@github.com:jaf7C7/HowTo.git
 template := template.html
 style := style.css
-dependencies := $(template) $(style) $(addprefix $(build)/,$(wildcard $(assets)/*))
+# XXX Is this necessary?
+# dependencies := $(template) $(style) $(build) $(addprefix $(build)/,$(wildcard $(assets)/*))
 gh-pages_url := git@github.com:jaf7C7/jaf7c7.github.io.git
 gh-pages_initial_commit := 1b955d6715184062cdc51d07632ed3d3ea30bc50
 pandoc := pandoc \
@@ -18,26 +19,30 @@ pandoc := pandoc \
 	--metadata=maxwidth:42em \
 	--metadata=document-css:true
 
-default: \
-  $(build) \
-  $(build)/index.html \
-  $(build)/$(notes)/index.html \
-  $(filter-out %/README.md,$(wildcard $(notes)/*.md))
-	@echo 'Done.'
+all: $(build) $(notes)
+	${MAKE} \
+		$(build)/index.html \
+		$(build)/$(notes)/index.html \
+		$(patsubst %.md,$(build)/%.html,$(filter-out %/README.md,$(wildcard $(notes)/*.md)))
+	@tree
 
 $(build):
 	git clone $(gh-pages_url) $@
 	git -C $(build) reset --hard $(gh-pages_initial_commit)
 
-$(build)/index.html: index.md $(dependencies)
+$(build)/%.html: %.md
 	$(pandoc) --output=$@ $<
 
-$(build)/$(notes)/index.html: $(notes)/README.md $(dependencies)
+$(notes):
+	test -d $@ || git clone $(notes_url) $@
+
+$(build)/$(notes)/index.html:
 	exec >$(notes)/toc.yaml ; \
+	echo 'title: "$(notes)"' ; \
 	echo 'toc:' ; \
 	for file in $(filter-out %/README.md,$(wildcard $(notes)/*.md)) ; do \
-		echo "- title: $$(sed -n '1s/. *//p' $$file)" ; \
-		echo "  url: /$${file}.html" ; \
+		echo "- title: $$(sed -n '1s/. *//p' "$$file")" ; \
+		echo "  url: /$${file%.md}.html" ; \
 	done
 	test -d $(dir $@) || mkdir $(dir $@)
 	$(pandoc) \
@@ -45,13 +50,6 @@ $(build)/$(notes)/index.html: $(notes)/README.md $(dependencies)
 		--output=$@ \
 		$(notes)/README.md
 	rm $(notes)/toc.yaml
-
-$(build)/$(assets)/%: $(assets)/%
-	test -d $@ || mkdir $(dir $@)
-	cp $< $@
-
-$(notes)/%:
-	test -d $(dir $@) || git clone $(notes_url) $(dir $@)
 
 serve:
 	gnome-terminal --tab -- \
