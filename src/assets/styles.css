@@ -1,0 +1,57 @@
+a {
+  color: blue;
+}
+
+a:hover {
+  text-decoration-style: wavy
+}
+
+a:active {
+  color: orangered;
+}
+
+a[href^="http"] {   /* Rough approx. of external links */
+  position: relative;
+  margin-right: 0.5em;
+}
+
+a[href^="http"]::after {
+  content: "";
+  position: absolute;
+  width: 0.8em;
+  height: 0.8em;
+  top: 0;
+  right: -0.8em;
+  background-image: url("external_link.svg");
+  background-size: cover;
+}
+
+header,
+nav {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+}
+
+header nav > a {
+  text-decoration: none;
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  padding-left: 5em;
+}
+
+header nav li + li {
+  margin-left: 1em;
+}
+
+footer {
+  margin-top: 8em;
+}
+
+pre > code.sourceCode {
+  white-space: pre-wrap;
+}

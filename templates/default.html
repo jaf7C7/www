@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>${ title-prefix } - ${ title }</title>
+  <!-- Pandoc default styles -->
+  <style>${ styles() }</style>
+  ${ for(css) }
+  <link rel="stylesheet" href="${ css }">
+  ${ endfor }
+</head>
+<body>
+  <header class="header">
+    <nav class="container">
+      <a class="header__title" href="/"><h1>${ title-prefix }</h1></a>
+      <ul class="header__links">
+        <li class="header__link"><a href="/notes/">Notes</a></li>
+        <li class="header__link"><a href="/projects/">Projects</a></li>
+      </ul>
+    </nav>
+  </header>
+	<main>
+		${ body }
+    ${ if(is_index) }
+    <br>
+    ${ templates/notes_toc.html() }
+    ${ endif }
+	</main>
+	<footer>
+    <p>
+    <small>This site was built using <a href="https://github.com/jaf7C7/www" target="_blank">www</a>.</small>
+    </p>
+	</footer>
+</body>
+</html>
