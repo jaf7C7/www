@@ -1,61 +1,68 @@
 site_name := Joss Appleton-Fox
-src_dir := src
-build_dir := build
-dependencies := Makefile $(wildcard templates/* defaults/*)
+build := build
+assets := assets
+notes := notes
+notes_url := git@github.com:jaf7C7/HowTo.git
+template := template.html
+style := style.css
+dependencies := $(template) $(style) $(addprefix $(build)/,$(wildcard $(assets)/*))
 gh-pages_url := git@github.com:jaf7C7/jaf7c7.github.io.git
 gh-pages_initial_commit := 1b955d6715184062cdc51d07632ed3d3ea30bc50
-notes_url = git@github.com:jaf7C7/HowTo.git
 pandoc := pandoc \
 	--standalone \
+	--template='$(template)' \
 	--embed-resources \
-	--resource-path=src/assets \
-  --css styles.css \
-	--metadata title-prefix:Joss Appleton-Fox \
-  --metadata maxwidth:42em \
-  --metadata document-css:true \
+	--resource-path='.:$(assets)' \
+	--css='$(style)' \
+	--metadata=title-prefix:'$(site_name)' \
+	--metadata=maxwidth:42em \
+	--metadata=document-css:true
 
 default: \
-	$(build_dir) \
-	$(build_dir)/index.html \
-	$(build_dir)/notes \
-	$(build_dir)/notes/index.html \
-	$(filter-out %/README.md,$(wildcard $(src_dir)/notes/*.md))
+  $(build) \
+  $(build)/index.html \
+  $(build)/$(notes)/index.html \
+  $(filter-out %/README.md,$(wildcard $(notes)/*.md))
+	@echo 'Done.'
 
-$(build_dir):
+$(build):
 	git clone $(gh-pages_url) $@
-	git -C $(build_dir) reset --hard $(gh-pages_initial_commit)
+	git -C $(build) reset --hard $(gh-pages_initial_commit)
 
-$(build_dir)/%.html: $(build_dir/%.md) $(dependencies)
+$(build)/index.html: index.md $(dependencies)
 	$(pandoc) --output=$@ $<
 
-$(build_dir)/notes/index.html: templates/notes_toc.html $(dependencies)
+$(build)/$(notes)/index.html: $(notes)/README.md $(dependencies)
+	exec >$(notes)/toc.yaml ; \
+	echo 'toc:' ; \
+	for file in $(filter-out %/README.md,$(wildcard $(notes)/*.md)) ; do \
+		echo "- title: $$(sed -n '1s/. *//p' $$file)" ; \
+		echo "  url: /$${file}.html" ; \
+	done
 	test -d $(dir $@) || mkdir $(dir $@)
 	$(pandoc) \
-		--variable=is_index:true \
-		--output=$@/index.html \
-		$</README.md
-
-templates/notes_toc.html: $(src_dir)/notes
-	test -d $(dir $@) || mkdir $(dir $@)
-	pandoc \
-		--toc=true \
-		--toc-depth=1 \
+		--metadata-file=$(notes)/toc.yaml \
 		--output=$@ \
-		$(filter-out %/README.md,$(wildcard $</*.md))
+		$(notes)/README.md
+	rm $(notes)/toc.yaml
 
-$(src_dir)/notes:
-	git clone $(notes_url) $@
+$(build)/$(assets)/%: $(assets)/%
+	test -d $@ || mkdir $(dir $@)
+	cp $< $@
+
+$(notes)/%:
+	test -d $(dir $@) || git clone $(notes_url) $(dir $@)
 
 serve:
 	gnome-terminal --tab -- \
-		browser-sync start --server $(build_dir) --files $(build_dir)
+		browser-sync start --server $(build) --files $(build)
 
 publish:
-	git -C $(build_dir) add .
-	git -C $(build_dir) commit -m "New build: $$(date)"
-	git -C $(build_dir) push -f
+	git -C $(build) add .
+	git -C $(build) commit -m "New build: $$(date)"
+	git -C $(build) push -f
 
 clean:
-	git -C $(build_dir) reset --hard $(gh-pages_initial_commit)
-	git -C $(build_dir) clean -dfx
-	rm -rf $(src_dir)/notes
+	git -C $(build) reset --hard $(gh-pages_initial_commit)
+	git -C $(build) clean -dfx
+	rm -rf notes

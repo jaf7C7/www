@@ -22,9 +22,13 @@
   </header>
 	<main>
 		${ body }
-    ${ if(is_index) }
+    ${ if(toc) }
     <br>
-    ${ templates/notes_toc.html() }
+    <ul class="toc">
+    ${ for(toc) }
+      <li><a href="${ toc.url }">${ toc.title }</a></li>
+    ${ endfor }
+    </ul>
     ${ endif }
 	</main>
 	<footer>
