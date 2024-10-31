@@ -1,7 +1,7 @@
 site_name := Joss Appleton-Fox
 src := src
 src_files := $(shell find $(src) -name '*.md')
-assets := $(shell find assets/ -type f)
+dependencies := Makefile template.html defaults.yaml $(wildcard assets/*)
 build := build
 gh-pages_url := git@github.com:jaf7C7/jaf7c7.github.io.git
 pandoc := pandoc --defaults=defaults.yaml
@@ -14,7 +14,7 @@ $(build):
 	@git -C $(build) reset --hard $(gh-pages_initial_commit)
 	@echo 'Created $@'
 
-$(build)/%.html: $(src)/%.md Makefile $(assets)
+$(build)/%.html: $(src)/%.md Makefile $(dependencies)
 	@echo '$@'
 	@test -d $(dir $@) || mkdir -p $(dir $@)
 	@$(pandoc) --output=$@ $<
