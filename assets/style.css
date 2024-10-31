@@ -14,12 +14,12 @@ a:active {
   color: orangered;
 }
 
-a[href^="http"] {   /* Rough approx. of external links */
+.external_link {   /* Rough approx. of external links */
   position: relative;
   margin-right: 0.5em;
 }
 
-a[href^="http"]::after {
+.external_link::after {
   content: "";
   position: absolute;
   width: 0.8em;
