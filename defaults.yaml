@@ -1,0 +1,21 @@
+# General Options
+from: markdown
+to: html
+verbosity: ERROR
+log-file: .pandoc.log
+
+# Reader Options
+shift-heading-level-by: 1
+extract-media: build/assets
+metadata:
+  maxwidth: 42em
+  document-css: true
+
+# General Writer Options
+standalone: true
+resource-path: ['assets']
+
+# HTML Specific Writer Options
+css: style.css
+embed-resources: true
+title-prefix: Joss Appleton-Fox

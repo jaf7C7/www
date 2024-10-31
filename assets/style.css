@@ -2,6 +2,10 @@ a {
   color: blue;
 }
 
+a:visited {
+  color: purple;
+}
+
 a:hover {
   text-decoration-style: wavy
 }
@@ -24,36 +28,6 @@ a[href^="http"]::after {
   right: -0.8em;
   background-image: url("external_link.svg");
   background-size: cover;
-}
-
-header {
-  margin-bottom: 2em;
-}
-
-header,
-nav {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  width: 100%;
-}
-
-header nav > a {
-  text-decoration: none;
-}
-
-header nav ul {
-  list-style: none;
-  display: flex;
-  padding-left: 5em;
-}
-
-header nav li + li {
-  margin-left: 1em;
-}
-
-footer {
-  margin-top: 8em;
 }
 
 pre > code.sourceCode {
