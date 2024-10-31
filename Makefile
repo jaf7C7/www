@@ -3,6 +3,7 @@ build := build
 assets := assets
 notes := notes
 notes_url := git@github.com:jaf7C7/HowTo.git
+projects := acc tictactoe cmt linked-list-python shtest
 template := template.html
 style := style.css
 dependencies := $(template) $(style) Makefile
@@ -24,7 +25,8 @@ all: $(build) $(notes)
 	@${MAKE} \
 		$(build)/index.html \
 		$(build)/$(notes)/index.html \
-		$(patsubst %.md,$(build)/%.html,$(filter-out %/README.md,$(wildcard $(notes)/*.md)))
+		$(patsubst %.md,$(build)/%.html,$(filter-out %/README.md,$(wildcard $(notes)/*.md))) \
+		$(build)/projects/index.html
 
 $(build):
 	@git clone $(gh-pages_url) $@
@@ -52,7 +54,26 @@ $(build)/$(notes)/index.html: $(dependencies)
 		--metadata-file=$(notes)/toc.yaml \
 		--output=$@ \
 		$(notes)/README.md
-	@rm $(notes)/toc.yaml
+	@echo 'Created $@'
+
+$(build)/projects/index.html: projects/index.md $(dependencies)
+	@exec >projects/toc.yaml ; \
+	echo 'title: projects' ; \
+	echo 'toc:' ; \
+	for project in $(projects) ; do \
+		description=$$( \
+			curl -sLH 'Accept: application/vnd.github+json' \
+				"https://api.github.com/repos/jaf7C7/$$project" | jq .description \
+		) ; \
+		echo "- title: $$project" ; \
+		echo "  url: 'https://github.com/jaf7C7/$$project'" ; \
+		echo "  description: $$description" ; \
+	done
+	@test -d $(dir $@) || mkdir $(dir $@)
+	@$(pandoc) \
+		--metadata-file=projects/toc.yaml \
+		--output=$@ \
+		projects/index.md
 	@echo 'Created $@'
 
 serve:
