@@ -4,7 +4,7 @@ verbosity: ERROR
 log-file: .pandoc.log
 standalone: true
 template: template.html
-title-prefix: Joss Appleton-Fox
+title-prefix: jaf7c7.github.io
 embed-resources: true
 resource-path: ['assets']
 css: style.css
