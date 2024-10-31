@@ -14,22 +14,6 @@ a:active {
   color: orangered;
 }
 
-.external_link {   /* Rough approx. of external links */
-  position: relative;
-  margin-right: 0.5em;
-}
-
-.external_link::after {
-  content: "";
-  position: absolute;
-  width: 0.8em;
-  height: 0.8em;
-  top: 0;
-  right: -0.8em;
-  background-image: url("external_link.svg");
-  background-size: cover;
-}
-
 pre > code.sourceCode {
   white-space: pre-wrap;
 }
@@ -45,14 +29,34 @@ nav {
   border-bottom: 1px solid black;
 }
 
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+main {
+  padding-bottom: 16em;
+}
+
 #main-title a {
   color: black;
   text-decoration: none;
 }
 
-nav ul {
-  list-style: none;
-  padding: 0;
+.external_link {
+  position: relative;
+  margin-right: 0.5em;
+}
+
+.external_link::after {
+  content: "";
+  position: absolute;
+  width: 0.8em;
+  height: 0.8em;
+  top: 0;
+  right: -0.8em;
+  background-image: url("external_link.svg");
+  background-size: cover;
 }
 
 .container {
