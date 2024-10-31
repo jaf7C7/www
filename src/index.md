@@ -1,6 +1,8 @@
-# Hi I'm Joss.
+% Home
 
-I'm teaching myself to code. Here are some projects that I've made:
+# Hi I'm Joss...
+
+I'm teaching myself to code.  Here are some projects that I've made:
 
 * [acc](https://github.com/jaf7C7/acc)
   - A CLI tool for tracking your finances, written in Python.
