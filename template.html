@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${ title } - ${ title-prefix }</title>
+  <style>
+    /* CSS for syntax highlighting */
+    $if(highlighting-css)$
+    $highlighting-css$
+    $endif$
+    $if(csl-css)$
+    $styles.citations.html()$
+    $endif$
+  </style>
+  ${ for(css) }
+  <link rel="stylesheet" href="${ css }">
+  ${ endfor }
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <h1 id="main-title"><a href="/">${ title-prefix }</a></h1>
+      <ul>
+        <li><a href="/">Home</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="container">
+    ${ body }
+  </main>
+  ${ for(script) }
+  <script src="${ script }"></script>
+  ${ endfor }
+</body>
+</html>
