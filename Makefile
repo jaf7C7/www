@@ -36,7 +36,6 @@ publish:
 	@git -C $(build_dir) push -f
 
 clean:
-	@rm -rf $(addprefix $(build_dir)/,$(projects))
-	@git -C $(build_dir) clean -fxd . >/dev/null 2>&1
 	@git -C $(build_dir) reset --hard \
 		$$(git -C $(build_dir) log --format=%H | tail -1) >/dev/null 2>&1
+	@git -C $(build_dir) clean -fxd . >/dev/null 2>&1
