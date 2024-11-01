@@ -36,7 +36,9 @@ publish:
 	@git -C $(build_dir) push -f
 
 clean:
-	@git -C $(build_dir) reset --hard \
-		$$(git -C $(build_dir) log --format=%H | tail -1) >/dev/null 2>&1
-	@git -C $(build_dir) clean -fxd . >/dev/null 2>&1
-	@rm -rf $(addprefix $(build_dir)/,$(projects))
+	@exec >/dev/null 2>&1 ; \
+	git -C $(build_dir) reset --hard \
+		$$(git -C $(build_dir) log --format=%H | tail -1) ; \
+	git -C $(build_dir) clean -fxd . ; \
+	git config --remove-section submodule ; \
+	rm -rf $(build_dir)/.git/modules
