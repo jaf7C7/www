@@ -23,8 +23,9 @@ $(build_dir)/%.html: $(src_dir)/%.md Makefile $(dependencies)
 
 $(build_dir)/%:
 	@echo 'building... $@'
-	@git -C $(build_dir) submodule add \
+	@git -C $(build_dir) clone \
 		"git@github.com:jaf7C7/$(notdir $(basename $@)).git" >/dev/null 2>&1
+	@rm -rf $@/.git
 
 serve:
 	@gnome-terminal --tab -- \
@@ -40,5 +41,4 @@ clean:
 	git -C $(build_dir) reset --hard \
 		$$(git -C $(build_dir) log --format=%H | tail -1) ; \
 	git -C $(build_dir) clean -fxd . ; \
-	git config --remove-section submodule ; \
-	rm -rf $(build_dir)/.git/modules
+	rm -rf $(addprefix $(build_dir)/,$(projects))
