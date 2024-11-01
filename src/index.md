@@ -1,3 +1,10 @@
-This site currently hosts the following projects:
+% Index
 
-* [image-carousel](/image-carousel/)
+This site hosts the front-ends of my web projects.
+
+Visit [my profile](https://github.com/jaf7C7) to see the rest of my projects.
+
+### Projects
+
+* [image-carousel](/image-carousel/){target="_blank"}
+  + A simple widget to browse a collection of images.
