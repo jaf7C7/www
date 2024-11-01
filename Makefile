@@ -32,7 +32,7 @@ serve:
 
 publish:
 	@git -C $(build_dir) add .
-	@git -C $(build_dir) commit -m "New build_dir: $$(date)"
+	@git -C $(build_dir) commit -m "New build: $$(date)"
 	@git -C $(build_dir) push -f
 
 clean:
