@@ -1,1 +1,3 @@
-This site will host the front-ends of my web projects.
+This site currently hosts the following projects:
+
+* [image-carousel](/image-carousel/)
