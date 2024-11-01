@@ -1,9 +1,9 @@
 site_name := Joss Appleton-Fox
+projects := image-carousel
 src_dir := src
+build_dir := build
 src_files := $(shell find $(src_dir) -name '*.md')
 dependencies := Makefile template.html defaults.yaml $(wildcard assets/*)
-build_dir := build
-projects := image-carousel
 gh-pages_url := git@github.com:jaf7C7/jaf7c7.github.io.git
 pandoc := pandoc --defaults=defaults.yaml
 
