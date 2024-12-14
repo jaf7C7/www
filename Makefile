@@ -1,5 +1,5 @@
 site_name := Joss Appleton-Fox
-projects := image-carousel image-gallery
+projects := image-carousel image-gallery calculator
 src_dir := src
 build_dir := build
 src_files := $(shell find $(src_dir) -name '*.md')

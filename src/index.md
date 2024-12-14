@@ -12,3 +12,6 @@ Visit [my profile](https://github.com/jaf7C7) to see the rest of my projects.
 
 * [image-gallery](/image-gallery/){target="_blank"}
   + Another simple widget to browse a collection of images.
+
+* [calculator](/calculator/){target="_blank"}
+  + A basic calculator implemented in JavaScript.
