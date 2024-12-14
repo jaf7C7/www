@@ -1,3 +1,5 @@
+# TODO: Use git submodules
+# TODO: Generate index.html project list programatically
 site_name := Joss Appleton-Fox
 projects := image-carousel image-gallery calculator
 src_dir := src
